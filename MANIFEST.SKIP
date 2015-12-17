@@ -13,3 +13,5 @@
 ^.#
 ^#
 ^check_bandwidth-
+\.travis\.yml
+\.git
