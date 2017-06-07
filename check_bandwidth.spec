@@ -8,10 +8,12 @@ Name:      %{name}
 Version:   %{version}
 Release:   %{release}
 License:   GPLv3+
-Packager:  Matteo Corti <matteo.corti@id.ethz.ch>
+Packager:  Matteo Corti <matteo@corti.li>
 Group:     Applications/System
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-Source:    http://www.id.ethz.ch/people/allid_list/corti/%{name}-%{version}.tar.gz
+URL:       https://github.com/matteocorti/check_bandwidth
+Source:    https://github.com/matteocorti/%{sourcename}/releases/download/v%{version}/%{sourcename}-%{version}.tar.gz
+
 BuildArch: noarch
 
 Requires: perl
