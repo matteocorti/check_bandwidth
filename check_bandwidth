@@ -346,7 +346,7 @@ for my $line (@lines) {
         next;
     }
 
-    if ( $line =~ /^[\\ *[0-9]+\]\ \ .*\ ([0-9]+)\ Kbits`\/sec/mx ) {
+    if ( $line =~ /^\[\ *[0-9]+\]\ \ .*\ ([0-9]+)\ Kbits\/sec/mx ) {
         if ( !defined $upstream ) {
             $upstream = $1;
         }
