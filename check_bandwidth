@@ -23,7 +23,7 @@ use Monitoring::Plugin::Threshold;
 use Net::DNS::Resolver;
 use File::Slurp;
 
-use version; our $VERSION = '0.9.6';
+use version; our $VERSION = '0.9.7';
 
 # IMPORTANT: Nagios plugins could be executed using embedded perl in this case
 #            the main routine would be executed as a subroutine and all the
@@ -68,15 +68,15 @@ sub usage {
     my %args = @_;
 
     my $exitval = 0;
-    if ($args{-exitval}) {
+    if ( $args{-exitval} ) {
         $exitval = $args{-exitval};
     }
-    
-    if ($args{-message}) {
+
+    if ( $args{-message} ) {
         print $args{-message};
     }
 
-    print<<'EOT';
+    print <<'EOT';
         check_bandwidth --host hostname
                    [--iperf path]
                    [--localport port] [--hostport port]
@@ -96,7 +96,7 @@ sub usage {
 EOT
 
     exit $exitval;
-    
+
 }
 
 ##############################################################################
@@ -139,7 +139,7 @@ sub get_ip {
     my $host = shift;
 
     if ( $host =~
-/((25[0-5]|2[0-4][0-9]|([01]?[0-9]?[0-9]))\.){3}(25[0-5]|2[0-4][0-9]|([01]?[0-9]?[0-9]))/mx
+/((25[0-5]|2[0-4]\d|([01]?\d?\d))\.){3}(25[0-5]|2[0-4]\d|([01]?\d?\d))/mxs
       )
     {
         return $host;
@@ -160,10 +160,10 @@ sub get_ip {
         }
     }
 
-    $plugin->nagios_exit(
-        UNKNOWN,
-        "cannot get the address of $host (" . $dns_resolver->errorstring . ')'
-    );
+    $plugin->nagios_exit( UNKNOWN,
+            "cannot get the address of $host ("
+          . $dns_resolver->errorstring
+          . ')' );
 
     return;
 
@@ -179,7 +179,7 @@ sub get_ip {
 # See also  : n/a
 sub check_positive_integer {
     my $number = shift;
-    return $number =~ /^[0-9]+$/mx;
+    return $number =~ /^\d+$/mxs;
 }
 
 ##############################################################################
@@ -199,18 +199,19 @@ sub get_path {
     my $which_command = "which $prog";
     my $which_output;
 
-    open $which_output, q{-|}, "$which_command 2>&1"
+    open $which_output, q{-|},
+      "$which_command 2>&1"
       or $plugin->nagios_exit( UNKNOWN,
         "Cannot execute $which_command: $OS_ERROR" );
 
     while (<$which_output>) {
         chomp;
-        if ( !/^which:/mx ) {
+        if ( !/^which:/mxs ) {
             $path = $_;
         }
     }
 
-    if ( !( close $which_output )
+    if (  !( close $which_output )
         && ( $OS_ERROR != 0 ) )
     {
 
@@ -248,9 +249,7 @@ $result = GetOptions(
 );
 
 if ($help) {
-    usage(
-        -exitval => UNKNOWN,
-    );
+    usage( -exitval => UNKNOWN, );
 }
 
 ###############
@@ -258,9 +257,7 @@ if ($help) {
 
 # syntax
 if ( !$result ) {
-    usage(
-        -exitval => UNKNOWN,
-    );
+    usage( -exitval => UNKNOWN, );
 }
 
 # host
@@ -336,17 +333,14 @@ if ( $verbosity > 1 ) {
 
 # process output
 
-my $upstream_id;
-my $downstream_id;
-
 for my $line (@lines) {
 
-    if ( $line =~ /^\[\ *([0-9]+)\]\ local.*/mx ) {
-        warn "ID $1";
+    if ( $line =~ /^\[\ *(\d+)\]\ local.*/mxs ) {
+        carp "ID $1";
         next;
     }
 
-    if ( $line =~ /^\[\ *[0-9]+\]\ \ .*\ ([0-9]+)\ Kbits\/sec/mx ) {
+    if ( $line =~ /^\[\ *\d+\]\ \ .*\ (\d+)\ Kbits\/sec/mxs ) {
         if ( !defined $upstream ) {
             $upstream = $1;
         }
@@ -378,7 +372,7 @@ $plugin->add_perfdata(
     uom   => 'K',
 );
 
-if ( !( close $output )
+if (  !( close $output )
     && ( $OS_ERROR != 0 ) )
 {
 
