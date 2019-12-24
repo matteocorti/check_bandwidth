@@ -1,5 +1,5 @@
-%define version 0.9.6
-%define release 2
+%define version 0.9.7
+%define release 0
 %define name       check_bandwidth
 %define sourcename check_bandwidth
 %define _prefix /usr/lib/nagios/plugins/contrib
@@ -41,6 +41,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) /usr/share/man/man3/%{name}.3pm.gz
 
 %changelog
+* Tue Dec 24 2019 Matteo Corti <matteo@corti.li> - 0.9.7-0
+- Updated to 0.9.7
+
 * Fri Mar 21 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.6-0
 - fixed the usage message (wrong one)
 
