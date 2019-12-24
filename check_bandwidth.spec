@@ -59,9 +59,9 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS Changes NEWS README.md TODO COPYING COPYRIGHT
+%doc AUTHORS Changes NEWS README TODO COPYING COPYRIGHT
 %{nagiospluginsdir}/%{sourcename}
-%{_mandir}/man1/%{sourcename}.1*
+%{_mandir}/man3/%{sourcename}.3*
 
 %changelog
 * Tue Dec 24 2019 Matteo Corti <matteo@corti.li> - 0.9.7-0
