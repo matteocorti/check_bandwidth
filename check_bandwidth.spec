@@ -1,47 +1,72 @@
-%define version 0.9.6
-%define release 1
-%define name    check_bandwidth
-%define _prefix /usr/lib/nagios/plugins/contrib
+%define version          0.9.7
+%define release          0
+%define sourcename       check_bandwidth
+%define packagename      nagios-plugins-check-bandwidth
+%define nagiospluginsdir %{_libdir}/nagios/plugins
 
-Summary:   Nagios plugin that checks the available bandwidth
-Name:      %{name}
-Version:   %{version}
-Release:   %{release}
-License:   GPLv3+
-Packager:  Matteo Corti <matteo@corti.li>
-Group:     Applications/System
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-URL:       https://github.com/matteocorti/check_bandwidth
-Source:    https://github.com/matteocorti/%{sourcename}/releases/download/v%{version}/%{sourcename}-%{version}.tar.gz
+# No binaries in this package
+%define debug_package    %{nil}
 
-BuildArch: noarch
+Summary:       A Nagios plugin to check if RedHat or Fedora system is up-to-date
+Name:          %{packagename}
+Version:       %{version}
+Obsoletes:     check_bandwidth
+Release:       %{release}%{?dist}
+License:       GPLv3+
+Packager:      Matteo Corti <matteo@corti.li>
+Group:         Applications/System
+BuildRoot:     %{_tmppath}/%{packagename}-%{version}-%{release}-root-%(%{__id_u} -n)
+URL:           https://github.com/matteocorti/check_bandwidth
+Source:        https://github.com/matteocorti/%{sourcename}/releases/download/v%{version}/%{sourcename}-%{version}.tar.gz
 
-Requires: perl
-Requires: iperf
+# Fedora build requirement (not needed for EPEL{4,5})
+BuildRequires: perl(ExtUtils::MakeMaker)
+BuildRequires: perl(Test::More)
+BuildRequires: perl(Readonly)
+
+Requires:      nagios-plugins
+Requires:      iperf
+# Yum security plugin RPM:
+#    Fedora             : yum-plugin-security (virtual provides yum-security)
+#    Red Hat Enterprise : yum-security
+# Requires:  yum-security
 
 %description
-Nagios plugin that checks the available bandwidth
+A Nagios plugin to check if RedHat or Fedora system is up-to-date
 
 %prep
-%setup -q
+%setup -q -n %{sourcename}-%{version}
 
 %build
-%__perl Makefile.PL  INSTALLSCRIPT=%{buildroot}%{_prefix} INSTALLSITEMAN3DIR=%{buildroot}/usr/share/man/man3 INSTALLSITESCRIPT=%{buildroot}%{_prefix}
-make
+%{__perl} Makefile.PL INSTALLDIRS=vendor \
+    INSTALLSCRIPT=%{nagiospluginsdir} \
+    INSTALLVENDORSCRIPT=%{nagiospluginsdir}
+make %{?_smp_mflags}
 
 %install
-make install
+rm -rf %{buildroot}
+make pure_install PERL_INSTALL_ROOT=%{buildroot}
+find %{buildroot} -type f -name .packlist -exec rm -f {} \;
+find %{buildroot} -type f -name "*.pod" -exec rm -f {} \;
+find %{buildroot} -depth -type d -exec rmdir {} 2>/dev/null \;
+%{_fixperms} %{buildroot}/*
+
+%check
+make test
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
-%defattr(-, root, root, 0644)
-%doc AUTHORS Changes NEWS README INSTALL TODO COPYING VERSION
-%attr(0755, root, root) %{_prefix}/%{name}
-%attr(0755, root, root) /usr/share/man/man3/%{name}.3pm.gz
+%defattr(-,root,root,-)
+%doc AUTHORS Changes NEWS README TODO COPYING COPYRIGHT
+%{nagiospluginsdir}/%{sourcename}
+%{_mandir}/man3/%{sourcename}.3*
 
 %changelog
+* Tue Dec 24 2019 Matteo Corti <matteo@corti.li> - 0.9.7-0
+- Updated to 0.9.7
+
 * Fri Mar 21 2008 Matteo Corti <matteo.corti@id.ethz.ch> - 0.9.6-0
 - fixed the usage message (wrong one)
 
