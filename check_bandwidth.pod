@@ -9,7 +9,7 @@ C<check_bandwidth> - a Nagios plugin to monitor a connection's bandwidth using i
 
 check_bandwidth is a Nagios plugin to monitor a connection's bandwidth using iperf
 
-Note that thet it reauires iperf running in server mode on the connected server
+Note that that it requires iperf running in server mode on the connected server
 
 =head1 VERSION
 
@@ -73,7 +73,7 @@ verbosity.
 =head1 EXIT STATUS
 
 0 if OK, 1 in case of a warning, 2 in case of a critical status and 3
-in case of an unkown problem
+in case of an unknown problem
 
 =head1 DEPENDENCIES
 

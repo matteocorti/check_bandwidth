@@ -1,14 +1,5 @@
 #!perl
 
-# RCS information
-# enable substitution with:
-#   $ svn propset svn:keywords "Id Revision HeadURL Source Date"
-#
-#   $Id: check_dir 856 2007-10-31 09:34:21Z corti $
-#   $Revision: 856 $
-#   $HeadURL: https://svn.id.ethz.ch/nagios_plugins/check_dir/check_dir $
-#   $Date: 2007-10-31 10:34:21 +0100 (Wed, 31 Oct 2007) $
-
 use strict;
 use warnings;
 
@@ -306,8 +297,8 @@ verbose "Executing \"$command\"\n";
 my $pid = open $output, q{-|}, "$command 2>&1"
   or $plugin->nagios_exit( UNKNOWN, "Cannot execute $command: $OS_ERROR" );
 
-# process command outpt
-# expexted format (example)
+# process command output
+# expected format (example)
 #
 # ------------------------------------------------------------
 # Server listening on TCP port 5001

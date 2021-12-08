@@ -1,7 +1,7 @@
 Build and install check_bandwidth
 
-Dependences
-===========
+Dependencies
+============
 
 check_bandwidth depends on several Perl modules:
 
